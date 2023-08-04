@@ -5,8 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7300bdf-069d-44b9-9796-faa896c229fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/treningsmonitorering/trening_db/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/trening_db/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/treningsmonitorering/treningsmonitorering/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/treningsmonitorering/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/treningsmonitorering.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/treningsmonitorering.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,7 +25,8 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true"
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
