@@ -428,6 +428,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
                         r3ps = exercise_reps[exercise][index]  # see if it is possible to move this up to the line under
                         # enumerate(exercise_weight[exercise]):
                         update_rm(name, exercise, date, weight, r3ps)
+                        continue
 
                 total_exercise_reps += exercise_reps[exercise][index]
                 total_exercise_weight += weight * exercise_reps[exercise][index]
@@ -910,6 +911,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                             total_training_distribution_reps["Total reps"] += (wekly_reps[exr][index])
                                             total_training_distribution_weight['Total weight'] += weight * wekly_reps[exr][index]
                                             total_training_distribution_weight[interval[0]] += weight * wekly_reps[exr][index]
+                                            continue
 
                                         # complex_training_distribution_reps["Total reps"] = (complex_training_distribution_reps["0-10%"] +
                                         #                                                     complex_training_distribution_reps["11-20%"] +

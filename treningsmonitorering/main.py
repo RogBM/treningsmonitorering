@@ -1,8 +1,7 @@
 import sys
-from PySide6.QtWidgets import QGroupBox, QFileDialog, QWidget, QApplication, QLabel, QPushButton, QDialog, QVBoxLayout, \
-    QHBoxLayout, QMenuBar, QLineEdit, QTextEdit, QComboBox, QMessageBox
-from PySide6.QtCore import Slot
-from datetime import date
+from PySide6.QtWidgets import QFileDialog, QWidget, QApplication, QLabel, QPushButton, QDialog, QVBoxLayout, QComboBox,\
+    QMessageBox
+
 import os
 import django
 
@@ -11,7 +10,6 @@ django.setup()
 from db_interaction import validate_athlete, get_exercise_distribution, find_rm_data
 from trening_db.models import Student, ResistanceExercise, TrainingRepMax
 from training_data_analys import loop_over_sheets_in_diary
-from datetime import date
 from openpyxl import load_workbook
 
 
