@@ -8,7 +8,7 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'treningsmonitorering.settings')
 django.setup()
 from db_interaction import validate_athlete, get_exercise_distribution, find_rm_data
-from trening_db.models import Student, ResistanceExercise, TrainingRepMax
+from trening_db.models import Student, TrainingRepMax
 from training_data_analys import loop_over_sheets_in_diary
 from openpyxl import load_workbook
 
