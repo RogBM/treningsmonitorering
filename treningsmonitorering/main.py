@@ -1,10 +1,8 @@
 import sys
 from PySide6.QtWidgets import QFileDialog, QWidget, QApplication, QLabel, QPushButton, QDialog, QVBoxLayout, QComboBox,\
     QMessageBox
-
 import os
 import django
-
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'treningsmonitorering.settings')
 django.setup()
 from db_interaction import validate_athlete, get_exercise_distribution, find_rm_data
