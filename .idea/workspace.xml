@@ -6,8 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="c7300bdf-069d-44b9-9796-faa896c229fa" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/treningsmonitorering/Daily reps distribution for Test.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/Daily reps distribution for Test.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/treningsmonitorering/Weekly reps distribution for Test.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/Weekly reps distribution for Test.xlsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/treningsmonitorering/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/treningsmonitorering/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/treningsmonitorering/training_data_analys.py" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/training_data_analys.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

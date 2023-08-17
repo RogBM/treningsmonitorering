@@ -381,7 +381,6 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
         student_obj_ids = list(ResistanceExercise.objects.filter(student__name=name).values_list('id', flat=True))
         stud_obj = student_obj_ids[0]
         instance = ResistanceExercise.objects.get(pk=stud_obj)
-        # dts = set([dt.pr_date for dt in TrainingRepMax.objects.filter(mode_of_exercise__student__name=name)])
 
         for k, exercise in enumerate(exercise_weight.keys()):
             exercise_volume_distribution_reps = {"0-10%": 0,
@@ -913,34 +912,6 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                             total_training_distribution_weight[interval[0]] += weight * wekly_reps[exr][index]
                                             continue
 
-                                        # complex_training_distribution_reps["Total reps"] = (complex_training_distribution_reps["0-10%"] +
-                                        #                                                     complex_training_distribution_reps["11-20%"] +
-                                        #                                                     complex_training_distribution_reps["21-30%"] +
-                                        #                                                     complex_training_distribution_reps["31-40%"] +
-                                        #                                                     complex_training_distribution_reps["41-50%"] +
-                                        #                                                     complex_training_distribution_reps["61-70%"] +
-                                        #                                                     complex_training_distribution_reps["51-60%"] +
-                                        #                                                     complex_training_distribution_reps["71-80%"] +
-                                        #                                                     complex_training_distribution_reps["81-90%"] +
-                                        #                                                     complex_training_distribution_reps["91-100%"] +
-                                        #                                                     complex_training_distribution_reps["101-110%"] +
-                                        #                                                     complex_training_distribution_reps["111-120%"] +
-                                        #                                                     complex_training_distribution_reps["121-130%"])
-
-                                        # total_training_distribution_reps["Total reps"] = (total_training_distribution_reps["0-10%"] +
-                                        #                                                   total_training_distribution_reps["11-20%"] +
-                                        #                                                   total_training_distribution_reps["21-30%"] +
-                                        #                                                   total_training_distribution_reps["31-40%"] +
-                                        #                                                   total_training_distribution_reps["41-50%"] +
-                                        #                                                   total_training_distribution_reps["51-60%"] +
-                                        #                                                   total_training_distribution_reps["61-70%"] +
-                                        #                                                   total_training_distribution_reps["71-80%"] +
-                                        #                                                   total_training_distribution_reps["81-90%"] +
-                                        #                                                   total_training_distribution_reps["91-100%"] +
-                                        #                                                   total_training_distribution_reps["101-110%"] +
-                                        #                                                   total_training_distribution_reps["111-120%"] +
-                                        #                                                   total_training_distribution_reps["121-130%"])
-
                     volume3 = WeeklyTrainingVolum(mode_of_exercise=instance,
                                                   wknr=wknr[0],
                                                   exercise=exr,
@@ -997,33 +968,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                     total_training_distribution_reps["Total reps"] += (wekly_reps[exercise][index])
                                     total_training_distribution_weight['Total weight'] += weight * wekly_reps[exercise][index]
                                     total_training_distribution_weight[interval[0]] += weight * wekly_reps[exercise][index]
-                                # training_distribution_reps["Total reps"] = (training_distribution_reps["0-10%"] +
-                                #                                             training_distribution_reps["11-20%"] +
-                                #                                             training_distribution_reps["21-30%"] +
-                                #                                             training_distribution_reps["31-40%"] +
-                                #                                             training_distribution_reps["41-50%"] +
-                                #                                             training_distribution_reps["51-60%"] +
-                                #                                             training_distribution_reps["61-70%"] +
-                                #                                             training_distribution_reps["71-80%"] +
-                                #                                             training_distribution_reps["81-90%"] +
-                                #                                             training_distribution_reps["91-100%"] +
-                                #                                             training_distribution_reps["101-110%"] +
-                                #                                             training_distribution_reps["111-120%"] +
-                                #                                             training_distribution_reps["121-130%"])
 
-                                # total_training_distribution_reps["Total reps"] = (total_training_distribution_reps["0-10%"] +
-                                #                                              total_training_distribution_reps["11-20%"] +
-                                #                                              total_training_distribution_reps["21-30%"] +
-                                #                                              total_training_distribution_reps["31-40%"] +
-                                #                                              total_training_distribution_reps["41-50%"] +
-                                #                                              total_training_distribution_reps["51-60%"] +
-                                #                                              total_training_distribution_reps["61-70%"] +
-                                #                                              total_training_distribution_reps["71-80%"] +
-                                #                                              total_training_distribution_reps["81-90%"] +
-                                #                                              total_training_distribution_reps["91-100%"] +
-                                #                                              total_training_distribution_reps["101-110%"] +
-                                #                                              total_training_distribution_reps["111-120%"] +
-                                #                                              total_training_distribution_reps["121-130%"])
 
             volume = WeeklyTrainingVolum(mode_of_exercise=instance,
                                          wknr=wknr[0],
