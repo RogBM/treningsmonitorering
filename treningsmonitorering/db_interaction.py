@@ -5,7 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'treningsmonitorering.settings')
 django.setup()
 import pandas as pd
 from trening_db.models import ResistanceExercise, DailyTrainingVolume, WeeklyTrainingVolum, Student, TrainingRepMax, \
-    DailyTrainingVolumeWeight, WeeklyTrainingVolumeWeight
+    DailyTrainingVolumeWeight, WeeklyTrainingVolumeWeight, MenstruationRegistry, OvulationRegistry
 from PySide6.QtWidgets import QMessageBox
 
 
@@ -717,6 +717,36 @@ def get_exercise_distribution(name=None, exercise=None, to_date=None, from_date=
         print(f'{name} has no training data associated with him/her')
 
     return None
+
+
+def retrieve_ovulation_and_menstruation_distribution(name=None):
+
+    ovulation_information = []
+    menstruation_information = []
+    ovul_object = OvulationRegistry.objects.filter(ovulation__student__name=name).order_by('id')
+    m_object = MenstruationRegistry.objects.filter(menstruation__student__name=name).order_by('id')
+
+    for obj in ovul_object:
+        ovulation_information.append([obj.date.strftime('%Y-%m-%d'),
+                                     obj.day,
+                                     obj.ovulation_situation])
+    for obj in m_object:
+        menstruation_information.append([obj.date.strftime('%Y-%m-%d'),
+                                        obj.day,
+                                        obj.menstruation_situation,
+                                        obj.numerical_menstruation_situation])
+
+    ovulation_ouput = pd.DataFrame(ovulation_information, columns=["Date",
+                                                                   "Day",
+                                                                   "Ovulation status"])
+
+    menstruation_output = pd.DataFrame(menstruation_information, columns=["Date",
+                                                                          "Day",
+                                                                          "Menstruation status",
+                                                                          "Numerical Menstruation Status"])
+
+    ovulation_ouput.to_excel(f"Ovulation information for {name}.xlsx", index=False)
+    menstruation_output.to_excel(f"Menstruation information for {name}.xlsx", index=False)
 
 
 def Check_weekly_training_volume():

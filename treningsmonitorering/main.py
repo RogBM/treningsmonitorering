@@ -5,7 +5,7 @@ import os
 import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'treningsmonitorering.settings')
 django.setup()
-from db_interaction import validate_athlete, get_exercise_distribution, find_rm_data
+from db_interaction import validate_athlete, get_exercise_distribution, find_rm_data, retrieve_ovulation_and_menstruation_distribution
 from trening_db.models import Student, TrainingRepMax
 from training_data_analys import loop_over_sheets_in_diary
 from openpyxl import load_workbook
@@ -83,21 +83,20 @@ class OverviewTrainingDiaries(QWidget):
         self.directory_button = QPushButton('Analyser treningsdata')
         self.rundown_button = QPushButton('Hent treningsdata (reps)')
         self.rm_progress_button = QPushButton('Hent RM progresjon')
+        self.ovul_menstru_button = QPushButton('Hent Menstruasjons- og Eggløsningsdata')
 
         layout = QVBoxLayout(self)
         layout.addWidget(self.directory_button)
         layout.addWidget(self.rundown_button)
         layout.addWidget(self.weight_button)
+        layout.addWidget(self.ovul_menstru_button)
         layout.addWidget((self.rm_progress_button))
 
         self.directory_button.clicked.connect(lambda: investigate_multiple_files())
         self.rundown_button.clicked.connect(lambda: re_analysis_dialog('dist reps'))
+        self.ovul_menstru_button.clicked.connect(lambda: ovulation_menstruation_dialog())
         self.rm_progress_button.clicked.connect(lambda: re_analysis_dialog('rm'))
         self.weight_button.clicked.connect(lambda: re_analysis_dialog('dist weight'))
-
-        # def singles(self):
-        #	self.single_file_ass = InvestigateSingleFiles()
-        #	self.single_file_ass.show()
 
         def re_analysis(name=None, exercise=None, reps=None, type=None):
 
@@ -113,6 +112,12 @@ class OverviewTrainingDiaries(QWidget):
 
             elif type == 'dist weight':
                 get_exercise_distribution(name=student, exercise=ex, type='dist weight')
+
+        def fertility_analysis(name=None):
+
+            student = name.currentText()
+            retrieve_ovulation_and_menstruation_distribution(name=student)
+
 
         def re_analysis_dialog(type=None):
             analysis_box = QDialog()
@@ -169,9 +174,27 @@ class OverviewTrainingDiaries(QWidget):
                 analysis_box.setLayout(layout)
                 analysis_box.exec()
 
+       #  self.setLayout(layout)
+        def ovulation_menstruation_dialog(type=None):
+            analysis_box = QDialog()
+            layout = QVBoxLayout(analysis_box)
+            students = [stud.name for stud in Student.objects.all()]
+
+            name_tag = QLabel('Athletes')
+            drop_down_stud = QComboBox()
+            for student in students:
+                drop_down_stud.addItem(student)
+
+            analyse_button = QPushButton('Summarize')
+
+            layout.addWidget(name_tag)
+            layout.addWidget(drop_down_stud)
+            analyse_button.clicked.connect(lambda: fertility_analysis(name=drop_down_stud))
+            layout.addWidget(analyse_button)
+            analysis_box.setLayout(layout)
+            analysis_box.exec()
+
         self.setLayout(layout)
-
-
 
 if __name__ == '__main__':
 
