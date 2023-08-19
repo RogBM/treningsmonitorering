@@ -9,8 +9,8 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'treningsmonitorering.settings')
 django.setup()
 from db_interaction import update_rm
-from trening_db.models import ResistanceExercise, DailyTrainingVolume, WeeklyTrainingVolum, TrainingRepMax, DailyVariables, \
-    WeeklyTrainingVolumeWeight, DailyTrainingVolumeWeight
+from trening_db.models import ResistanceExercise, DailyTrainingVolume, WeeklyTrainingVolum, TrainingRepMax, \
+    WeeklyTrainingVolumeWeight, DailyTrainingVolumeWeight, OvulationRegistry, MenstruationRegistry
 import calendar
 from openpyxl import load_workbook
 import datetime
@@ -127,31 +127,85 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
 
         return training_days
 
-    def find_daily_variables(sheet_index, name):
 
-        sheet = workbook[sheet_index]
-        daily_variables = {}
-        dayz = [day for day in find_days(sheet_index).keys()]
-        ids = list(ResistanceExercise.objects.filter(student__name=name).values_list('id', flat=True))
-        stud_id = ids[0]
-        instance = ResistanceExercise.objects.get(pk=stud_id)
+    def retrieve_menstruation_ovulation_data(sheet_name=None, dates=None, day=None):
 
-        for index, row_number in enumerate(find_days(sheet_index).values()):
-            variables = [daily_vars.value for daily_vars in sheet[row_number[0] - 1] if daily_vars.value != None]
-            daily_variables[dayz[index]] = (variables)
-            vrs = DailyVariables(mode_of_exercise=instance,
-                                 date=variables[0],
-                                 weight=variables[1],
-                                 injury_status=variables[2],
-                                 injury_type=variables[3],
-                                 sleep_quality=variables[4],
-                                 sleep_duration=variables[5],
-                                 training_period=variables[6],
-                                 rpe=variables[7],
-                                 prs=variables[8])
-            vrs.save()
+        list_of_row_numbers = [1, 46, 91, 136, 181, 226, 271]
+        alt_list = ["nei", "medium", "lett", "kraftig"]
+        ovulation_registration = []
+        menstruation_registration = []
+        numerical_menstruation_information = []
+        sheet = workbook[sheet_name]
+        student_obj_ids = list(ResistanceExercise.objects.filter(student__name=name).values_list('id', flat=True))
+        stud_obj = student_obj_ids[0]
+        instance = ResistanceExercise.objects.get(pk=stud_obj)
 
-        return daily_variables
+
+        for row_number in list_of_row_numbers:
+            ovulation_information = sheet[f'B{row_number}'].value
+            menstruation_information = sheet[f'C{row_number}'].value
+            corrected_ovulation_information = ovulation_information.strip().lower()
+            corrected_menstruation_information = menstruation_information.strip().lower()
+
+            if corrected_ovulation_information == "ja":
+                ovulation_registration.append(True)
+
+            elif corrected_ovulation_information == "nei":
+                ovulation_registration.append(False)
+
+            elif corrected_ovulation_information == "ovulation":
+                ovulation_registration.append(False)
+
+            menstruation_registration.append(corrected_menstruation_information)
+
+            for i, alt in enumerate(alt_list):
+                if corrected_menstruation_information == alt_list[i]:
+                    numerical_menstruation_information.append(i)
+
+            if corrected_menstruation_information == "menstruation":
+                numerical_menstruation_information.append(0)
+
+            for i, ovulation in enumerate(ovulation_registration):
+                ovul_entry = OvulationRegistry(ovulation=instance,
+                                             date=dates[i],
+                                             day=day,
+                                             ovulation_situation=ovulation)
+
+                menstr_entry = MenstruationRegistry(menstruation=instance,
+                                                    date=dates[i],
+                                                    day=day,
+                                                    menstruation_situation=menstruation_registration[i],
+                                                    numerical_menstruation_situation=numerical_menstruation_information[i]
+                                                    )
+                ovul_entry.save()
+                menstr_entry.save()
+
+
+    # def find_daily_variables(sheet_index, name):
+    #
+    #     sheet = workbook[sheet_index]
+    #     daily_variables = {}
+    #     dayz = [day for day in find_days(sheet_index).keys()]
+    #     ids = list(ResistanceExercise.objects.filter(student__name=name).values_list('id', flat=True))
+    #     stud_id = ids[0]
+    #     instance = ResistanceExercise.objects.get(pk=stud_id)
+    #
+    #     for index, row_number in enumerate(find_days(sheet_index).values()):
+    #         variables = [daily_vars.value for daily_vars in sheet[row_number[0] - 1] if daily_vars.value != None]
+    #         daily_variables[dayz[index]] = (variables)
+    #         vrs = DailyVariables(mode_of_exercise=instance,
+    #                              date=variables[0],
+    #                              weight=variables[1],
+    #                              injury_status=variables[2],
+    #                              injury_type=variables[3],
+    #                              sleep_quality=variables[4],
+    #                              sleep_duration=variables[5],
+    #                              training_period=variables[6],
+    #                              rpe=variables[7],
+    #                              prs=variables[8])
+    #         vrs.save()
+    #
+    #     return daily_variables
 
     def find_dates(sheet_index):
 
@@ -310,6 +364,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
 
     # @performance
     def find_daily_training_distribution(day, sheet_index, date):
+
         one_rm_values = find_one_rm(sheet_index)
         exercise_weight = {}
         exercise_reps = {}
@@ -528,7 +583,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
             date = dt.date()
             if day == wkday and date not in dts:
                 find_daily_training_distribution(day, sheet_index, date)
-
+                retrieve_menstruation_ovulation_data(sheet_name=sheet_index, dates=dates, day=day)
 @performance
 def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
 
@@ -540,6 +595,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
             caps_letters_gone = whitespace_gone_ex.lower()
 
             return caps_letters_gone
+
 
     def find_exercises(sheet_index=None):
 
@@ -1064,6 +1120,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
     if wknr[0] > max_week:
         find_weekly_training_distribution(sheet_index)
 
+
 @performance
 def loop_over_sheets_in_diary(file_path, name, age, gender, typ):  # calls get_distribution_all_weeks() and get_distribution_all_days() to instanciates the daily and weekly classes
 
@@ -1080,6 +1137,7 @@ def loop_over_sheets_in_diary(file_path, name, age, gender, typ):  # calls get_d
                 continue
             get_distribution_all_weeks(sheet_name, file_path, name, age, gender)
             get_distribution_all_days(sheet_name, file_path, name, age, gender)
+
 
             # create_overview()
 

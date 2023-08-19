@@ -103,14 +103,29 @@ class WeeklyTrainingVolum(models.Model):
     week = models.IntegerField()
 
 
-class DailyVariables(models.Model):
-    mode_of_exercise = models.ForeignKey(ResistanceExercise, on_delete=(models.CASCADE))
-    date = models.DateField(null=True)
-    weight = models.IntegerField()
-    injury_status = models.BooleanField()
-    injury_type = models.CharField(max_length=100)
-    sleep_quality = models.IntegerField()
-    sleep_duration = models.IntegerField()
-    rpe = models.IntegerField()
-    prs = models.IntegerField()
-    training_period = models.CharField(max_length=100)
+class OvulationRegistry(models.Model):
+    ovulation = models.ForeignKey(ResistanceExercise, on_delete=models.CASCADE)
+    date = models.DateField()
+    day = models.CharField(max_length=100, default=None)
+    ovulation_situation = models.BooleanField(default=False)
+
+
+class MenstruationRegistry(models.Model):
+    menstruation = models.ForeignKey(ResistanceExercise, on_delete=models.CASCADE)
+    date = models.DateField()
+    day = models.CharField(max_length=100)
+    menstruation_situation = models.CharField(max_length=100)
+    numerical_menstruation_situation = models.IntegerField()
+
+
+# class DailyVariables(models.Model):
+#     mode_of_exercise = models.ForeignKey(ResistanceExercise, on_delete=(models.CASCADE))
+#     date = models.DateField(null=True)
+#     weight = models.IntegerField()
+#     injury_status = models.BooleanField()
+#     injury_type = models.CharField(max_length=100)
+#     sleep_quality = models.IntegerField()
+#     sleep_duration = models.IntegerField()
+#     rpe = models.IntegerField()
+#     prs = models.IntegerField()
+#     training_period = models.CharField(max_length=100)
