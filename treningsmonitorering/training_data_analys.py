@@ -165,20 +165,20 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
             if corrected_menstruation_information == "menstruation":
                 numerical_menstruation_information.append(0)
 
-            for i, ovulation in enumerate(ovulation_registration):
-                ovul_entry = OvulationRegistry(ovulation=instance,
-                                             date=dates[i],
-                                             day=day,
-                                             ovulation_situation=ovulation)
+        for i, ovulation in enumerate(ovulation_registration):
+            ovul_entry = OvulationRegistry(ovulation=instance,
+                                         date=dates[i],
+                                         day=Days[i],
+                                         ovulation_situation=ovulation)
 
-                menstr_entry = MenstruationRegistry(menstruation=instance,
-                                                    date=dates[i],
-                                                    day=day,
-                                                    menstruation_situation=menstruation_registration[i],
-                                                    numerical_menstruation_situation=numerical_menstruation_information[i]
-                                                    )
-                ovul_entry.save()
-                menstr_entry.save()
+            menstr_entry = MenstruationRegistry(menstruation=instance,
+                                                date=dates[i],
+                                                day=Days[i],
+                                                menstruation_situation=menstruation_registration[i],
+                                                numerical_menstruation_situation=numerical_menstruation_information[i]
+                                                )
+            ovul_entry.save()
+            menstr_entry.save()
 
 
     # def find_daily_variables(sheet_index, name):
