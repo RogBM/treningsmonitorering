@@ -6,9 +6,9 @@ django.setup()
 from trening_db.models import Student, ResistanceExercise, OvulationRegistry, MenstruationRegistry
 
 
-student = Student.objects.filter(name='Test')
+student = Student.objects.filter(name='Test2')
 for stud in student:
-    pass
+    stud.delete()
 
 
 student2 = OvulationRegistry.objects.filter(ovulation__student__name="Test")
