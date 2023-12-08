@@ -327,21 +327,27 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
 
         for day, row_number in find_days(sheet_index).items():
             for exercise in Col_of_interest[row_number[0]:row_number[1]]:
+                # print("column of interest", Col_of_interest[row_number[0]:row_number[1]])
                 if exercise.value not in Variables and exercise.value not in cmnts:
                     exercise_row_location = exercise.row
                     complex_ex = complex_exercises.search(exercise.value)
+                    # print(exercise.value, complex_ex)
                     if complex_ex:
                         exercises = split_complex_exercises(exercise.value)
+                        # print(exercise.value, exercises)
                         for i, exr1 in enumerate(exercises):
                             exr = flexible_exercises(exr1)
+                            # print("1", exr)
                             for reps in sheet[exercise_row_location + 1]:
                                 if reps.value not in Variables and reps.value != exercise.value and (
                                         day, exr) not in daily_training_rundown_reps.keys():
+                                    # print("2", exr)
                                     if type(reps.value) == str:
                                         comment = comments.search(reps.value)
                                         if comment:
                                             continue
                                         rp = split_complex_reps(reps.value)
+                                        # print("3", exr)
                                         daily_training_rundown_reps[day, exr] = [rp[i]]
                                 elif reps.value not in Variables and reps.value != exercise.value and (
                                         day, exr) in daily_training_rundown_reps.keys():
@@ -359,7 +365,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
                         elif reps.value not in Variables and reps.value != exercise.value and (
                                 day, exr) in daily_training_rundown_reps.keys() and reps.value not in cmnts:
                             daily_training_rundown_reps[(day, exr)].append(reps.value)
-
+        # print("daily rundown reps", daily_training_rundown_reps)
         return daily_training_rundown_reps
 
     # @performance
@@ -415,7 +421,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
         }
 
         def find_variables(variable):
-
+            # print(variable)
             if variable == find_daily_weight(sheet_index).items():
                 for exercise_volume in variable:
                     if day in exercise_volume[0]:
@@ -470,19 +476,35 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
             total_exercise_weight = 0
 
             for index, weight in enumerate(exercise_weight[exercise]):
+
+                lower_range = None
                 for interval in intensity_zones.items():
-                    if exercise in one_rm_values.keys() and weight in range(
-                            (int(one_rm_values[exercise] * interval[1][0])),
-                            (int(one_rm_values[exercise] * interval[1][1]))):
+                    if exercise not in one_rm_values.keys():
+                        continue
+                    upper_interval = interval[1][1] * float(one_rm_values[exercise])
+                    lower_interval = interval[1][0] * float(one_rm_values[exercise])
+
+                    if lower_range == None:
+                        upper_range = int(upper_interval * 100)
+                        lower_range = int(lower_interval * 100) + 1
+
+                    elif lower_range:
+                        upper_range = int(upper_interval * 100)
+
+                    edited_weight = weight * 100
+
+                    if edited_weight in range(lower_range, upper_range):
+                        lower_range = upper_range + 1
                         exercise_volume_distribution_reps[interval[0]] += (exercise_reps[exercise][index])
                         exercise_volume_distribution_weight[interval[0]] += weight * (exercise_reps[exercise][index])
                         total_daily_distribution_reps[interval[0]] += (exercise_reps[exercise][index])
                         total_daily_distribution_weight[interval[0]] += weight * (exercise_reps[exercise][index])
 
-                        r3ps = exercise_reps[exercise][index]  # see if it is possible to move this up to the line under
-                        # enumerate(exercise_weight[exercise]):
+                        r3ps = exercise_reps[exercise][index]
+
                         update_rm(name, exercise, date, weight, r3ps)
                         continue
+                    lower_range = upper_range + 1
 
                 total_exercise_reps += exercise_reps[exercise][index]
                 total_exercise_weight += weight * exercise_reps[exercise][index]
@@ -717,6 +739,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                     for i, exr1 in enumerate(exrss):
                         exr = flexible_exercises(exr1)
                         for reps in sheet[row_number + 1]:
+                            # print("1", reps, type(reps.value))
                             if reps.value != None and reps.value not in exercises and exr not in reps_pr_set and \
                                     reps.value not in cmnts:
                                 if type(reps.value) == str:  # and int(reps.value[0]) == int:
@@ -724,7 +747,8 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                     reps_pr_set[exr] = [rp[i]]
 
                             elif reps.value != None and reps.value not in exercises and exr in reps_pr_set:
-                                comment = comments.search(reps.value)
+                                # print("2", reps)
+                                comment = comments.search(str(reps.value))
                                 if comment:
                                     continue
                                 if type(reps.value) == str:
@@ -954,10 +978,27 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                         for key_one_rm in one_RM.keys():
                             if exr == key_weights and exr == key_one_rm:
                                 for index, weight in enumerate(weekly_weight[exr]):
+                                    lower_range = None
                                     for interval in intervals.items():
+                                        upper_interval = interval[1][1] * float(one_RM[key_one_rm])
+                                        lower_interval = interval[1][0] * float(one_RM[key_one_rm])
 
-                                        if weight in range((int(one_RM[key_one_rm] * interval[1][0])),
-                                                           (int(one_RM[key_one_rm] * interval[1][1]))):
+                                        if lower_range == None:
+                                            upper_range = int(upper_interval * 100)
+                                            lower_range = int(lower_interval * 100) + 1
+
+                                        elif lower_range:
+                                            upper_range = int(upper_interval * 100)
+
+                                        edited_weight = weight * 100
+
+                                        # if exercise == "rykk":
+                                        #     print("ranges exr:", lower_range, upper_range, edited_weight)
+
+                                        if edited_weight in range(lower_range, upper_range):
+                                            # if exr == "rykk:":
+                                            #    print("\n", "Added 1", exr, weight, "\n")
+                                            lower_range = upper_range + 1
                                             complex_training_distribution_reps[interval[0]] += (wekly_reps[exr][index])
                                             complex_training_distribution_weight[interval[0]] += weight * (wekly_reps[exr][index])
                                             complex_training_distribution_weight['Total weight'] += weight * wekly_reps[exr][index]
@@ -966,7 +1007,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                             total_training_distribution_reps["Total reps"] += (wekly_reps[exr][index])
                                             total_training_distribution_weight['Total weight'] += weight * wekly_reps[exr][index]
                                             total_training_distribution_weight[interval[0]] += weight * wekly_reps[exr][index]
-                                            continue
+                                        lower_range = upper_range + 1
 
                     volume3 = WeeklyTrainingVolum(mode_of_exercise=instance,
                                                   wknr=wknr[0],
@@ -1012,10 +1053,29 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
             for key_weights in weekly_weight.keys():
                 for key_one_rm in one_RM.keys():
                     if exercise == key_weights and exercise == key_one_rm:
-                        for index, weight in enumerate(weekly_weight[exercise]):
-                            for interval in intervals.items():
 
-                                if weight in range((int(one_RM[key_one_rm] * interval[1][0])), (int(one_RM[key_one_rm] * interval[1][1]))):
+                        for index, weight in enumerate(weekly_weight[exercise]):
+                            lower_range = None
+                            for interval in intervals.items():
+                                upper_interval = interval[1][1] * float(one_RM[key_one_rm])
+                                lower_interval = interval[1][0] * float(one_RM[key_one_rm])
+
+                                if lower_range == None:
+                                    upper_range = int(upper_interval * 100)
+                                    lower_range = int(lower_interval * 100) + 1
+
+                                elif lower_range:
+                                    upper_range = int(upper_interval * 100)
+
+                                edited_weight = weight * 100
+
+                                # if exercise == "rykk":
+                                #     print("after edit, ranges:", lower_range, upper_range, edited_weight)
+
+                                if edited_weight in range(lower_range, upper_range):
+                                    # if exercise == "rykk":
+                                    #     print("\n", "added 2:", exercise, weight, "\n")
+                                    lower_range = upper_range + 1
                                     training_distribution_reps[interval[0]] += (wekly_reps[exercise][index])
                                     training_distribution_weight[interval[0]] += weight * (wekly_reps[exercise][index])
                                     training_distribution_weight['Total weight'] += weight * wekly_reps[exercise][index]
@@ -1024,6 +1084,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                     total_training_distribution_reps["Total reps"] += (wekly_reps[exercise][index])
                                     total_training_distribution_weight['Total weight'] += weight * wekly_reps[exercise][index]
                                     total_training_distribution_weight[interval[0]] += weight * wekly_reps[exercise][index]
+                                lower_range = upper_range + 1
 
 
             volume = WeeklyTrainingVolum(mode_of_exercise=instance,
@@ -1135,6 +1196,7 @@ def loop_over_sheets_in_diary(file_path, name, age, gender, typ):  # calls get_d
 
             if sheet_name == 'RM oversikt' or sheet_name == 'Retningslinjer' or sheet_name == 'Treningsprogram':
                 continue
+            print(sheet_name)
             get_distribution_all_weeks(sheet_name, file_path, name, age, gender)
             get_distribution_all_days(sheet_name, file_path, name, age, gender)
 
