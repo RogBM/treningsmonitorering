@@ -471,14 +471,15 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
                                                   "101-110%": 0,
                                                   "111-120%": 0,
                                                   "121-130%": 0
-                                                  }
+                                                }
             total_exercise_reps = 0
             total_exercise_weight = 0
 
             for index, weight in enumerate(exercise_weight[exercise]):
-
                 lower_range = None
                 for interval in intensity_zones.items():
+                    is_true_exercise = exercise in one_rm_values.keys()
+                    print(is_true_exercise)
                     if exercise not in one_rm_values.keys():
                         continue
                     upper_interval = interval[1][1] * float(one_rm_values[exercise])
@@ -492,8 +493,8 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
                         upper_range = int(upper_interval * 100)
 
                     edited_weight = weight * 100
+                    if edited_weight in range(lower_range, upper_range) or edited_weight == upper_range:
 
-                    if edited_weight in range(lower_range, upper_range):
                         lower_range = upper_range + 1
                         exercise_volume_distribution_reps[interval[0]] += (exercise_reps[exercise][index])
                         exercise_volume_distribution_weight[interval[0]] += weight * (exercise_reps[exercise][index])
@@ -510,7 +511,6 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
                 total_exercise_weight += weight * exercise_reps[exercise][index]
             sum_of_total_daily_reps += total_exercise_reps  # OBS This also adds the values that are beyond the scope of investigation (higher than 130% of 1RM), even tho the values are not added into the intensity distribution
             sum_of_total_daily_weight += total_exercise_weight
-
 
             volume = DailyTrainingVolume(mode_of_exercise=instance,
                                          date=date,
@@ -605,7 +605,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
             date = dt.date()
             if day == wkday and date not in dts:
                 find_daily_training_distribution(day, sheet_index, date)
-                retrieve_menstruation_ovulation_data(sheet_name=sheet_index, dates=dates, day=day)
+                # retrieve_menstruation_ovulation_data(sheet_name=sheet_index, dates=dates, day=day)
 @performance
 def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
 
@@ -834,7 +834,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
     # @performance
     def find_weekly_training_distribution(sheet_index):  # creates objects containing the exercise name and the training distribution
 
-        sht_name = re.compile('\d')
+        sht_name = re.compile(r'\d')
         try:
             week = sht_name.findall(sheet_index)
             if len(week) < 2:
@@ -995,7 +995,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                         # if exercise == "rykk":
                                         #     print("ranges exr:", lower_range, upper_range, edited_weight)
 
-                                        if edited_weight in range(lower_range, upper_range):
+                                        if edited_weight in range(lower_range, upper_range) or edited_weight == upper_range:
                                             # if exr == "rykk:":
                                             #    print("\n", "Added 1", exr, weight, "\n")
                                             lower_range = upper_range + 1
@@ -1072,7 +1072,7 @@ def get_distribution_all_weeks(sheet_index, file_path, name, age, gender):
                                 # if exercise == "rykk":
                                 #     print("after edit, ranges:", lower_range, upper_range, edited_weight)
 
-                                if edited_weight in range(lower_range, upper_range):
+                                if edited_weight in range(lower_range, upper_range) or edited_weight == upper_range:
                                     # if exercise == "rykk":
                                     #     print("\n", "added 2:", exercise, weight, "\n")
                                     lower_range = upper_range + 1

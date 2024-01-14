@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c7300bdf-069d-44b9-9796-faa896c229fa" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/treningsmonitorering/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/treningsmonitorering/manual_db_interaction.py" beforeDir="false" afterPath="$PROJECT_DIR$/treningsmonitorering/manual_db_interaction.py" afterDir="false" />
@@ -51,15 +50,5 @@
       <updated>1691182973119</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/treningsmonitorering/manual_db_interaction.py</url>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

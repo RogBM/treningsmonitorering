@@ -51,16 +51,14 @@ for stud in student:
     stud.delete()
 
 
-student2 = OvulationRegistry.objects.filter(ovulation__student__name="Test")
-student3 = MenstruationRegistry.objects.filter(menstruation__student__name="Test")
-for stud in student2:
-    print(stud.date,
-          stud.day,
-          stud.ovulation_situation)
-
-for stud in student3:
-    print(stud.date,
-          stud.day,
-          stud.menstruation_situation,
-          stud.numerical_menstruation_situation)
+# student2 = Student.objects.filter(student__name="Roger")
+# student3 = MenstruationRegistry.objects.filter(menstruation__student__name="Test")
+# for stud in student2:
+#     stud.delete()
+#
+# for stud in student3:
+#     print(stud.date,
+#           stud.day,
+#           stud.menstruation_situation,
+#           stud.numerical_menstruation_situation)
 
