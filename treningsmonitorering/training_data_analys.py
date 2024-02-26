@@ -479,7 +479,7 @@ def get_distribution_all_days(sheet_index, file_path, name, age, gender):
                 lower_range = None
                 for interval in intensity_zones.items():
                     is_true_exercise = exercise in one_rm_values.keys()
-                    print(is_true_exercise)
+                    # print(is_true_exercise)
                     if exercise not in one_rm_values.keys():
                         continue
                     upper_interval = interval[1][1] * float(one_rm_values[exercise])
